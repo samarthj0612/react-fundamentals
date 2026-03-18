@@ -1,10 +1,15 @@
 "use client"
 
+import { useRouter } from "next/navigation"
 import { PropsWithChildren } from "react"
 
 const TodoLayout = ({ children }: PropsWithChildren) => {
+  const router = useRouter();
+
   const addTodoHandler = () => {
-    // Navigate to the add todo page
+    if(router){
+      router.push("/todo/new")
+    }
   }
 
   return (
