@@ -3,10 +3,13 @@
 import { ApiResponse } from "@/types/api.types";
 import { Todo } from "@/types/todo.types";
 import { Trash } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const TodoPage = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
+
+  const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,8 +37,10 @@ const TodoPage = () => {
     return res.json();
   }
 
-  const clickHandler = () => {
-    alert("Todo item clicked");
+  const clickHandler = (id: string) => {
+    if(router){
+      router.push(`/todo/${id}`);
+    }
   }
 
   const deleteHandler = () => {
@@ -47,9 +52,9 @@ const TodoPage = () => {
       <div className="flex flex-col flex-wrap gap-4">
         {todos.map((todo: Todo) => (
           <div key={todo.id} className="flex items-center border border-black/20 p-4 rounded-sm cursor-pointer transition-all hover:shadow-lg">
-            <div className="flex-1" onClick={clickHandler}>
+            <div className="flex-1" onClick={() => clickHandler(todo.id)}>
               <h3>{todo.title}</h3>
-              <p className="text-sm">{todo.description}</p>
+              <p className="text-sm line-clamp-2">{todo.description}</p>
             </div>
 
             <span className="p-2 rounded-full transition-all cursor-pointer hover:bg-gray-200" onClick={deleteHandler}>
