@@ -1,5 +1,6 @@
 "use client";
 
+import api from "@/lib/axios";
 import { ApiResponse } from "@/types/api.types";
 import { Todo } from "@/types/todo.types";
 import { Trash } from "lucide-react";
@@ -43,8 +44,23 @@ const TodoPage = () => {
     }
   }
 
-  const deleteHandler = () => {
-    alert("Delete handler called");
+  const deleteHandler = async (id: string) => {
+    if(!id){
+      console.error("Todo id is required for deletion");
+      return;
+    }
+
+    try {
+      const response = await api.delete(`/todo/${id}`);
+      
+      if(response?.data?.status){
+        setTodos(prevTodos => prevTodos.filter(todo => todo.id !== id));
+      } else {
+        console.error("Failed to delete todo:", response?.data?.message || "Unknown error");
+      }
+    } catch (error) {
+      console.error("Error deleting todo:", error);
+    }
   }
 
   return (
@@ -57,7 +73,7 @@ const TodoPage = () => {
               <p className="text-sm line-clamp-2">{todo.description}</p>
             </div>
 
-            <span className="p-2 rounded-full transition-all cursor-pointer hover:bg-gray-200" onClick={deleteHandler}>
+            <span className="p-2 rounded-full transition-all cursor-pointer hover:bg-gray-200" onClick={() => deleteHandler(todo.id)}>
               <Trash size={20} className=""/>
             </span>
           </div>

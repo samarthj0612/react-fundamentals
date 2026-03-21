@@ -1,4 +1,4 @@
-import { getTodoUsingId, updateTodo } from "@/services/todo.service";
+import { getTodoUsingId, updateTodo, deleteTodo } from "@/services/todo.service";
 import { NextResponse } from "next/server";
 
 export const GET = async (
@@ -48,5 +48,33 @@ export const PUT = async (request: Request, context: { params: { id: string } })
     status: true,
     message: "Todo updated successfully",
     data: updatedTodo
+  })
+}
+
+export const DELETE = async (request: Request, context: { params: { id: string } }) => {
+  const { id } = await context.params || {};
+  
+  if(!id){
+    return NextResponse.json({
+      status: false,
+      message: "Todo id is required for deletion",
+    }, { status: 400 });
+  }
+
+  const todo = await getTodoUsingId(id);
+
+  if (!todo) {
+    return NextResponse.json({
+      status: false,
+      message: "Todo not found",
+    }, { status: 404 });
+  }
+
+  const deletedTodo = await deleteTodo(id);
+
+  return NextResponse.json({
+    status: true,
+    message: "Todo deleted successfully",
+    data: deletedTodo
   })
 }

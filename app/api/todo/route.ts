@@ -1,5 +1,4 @@
-import { mockTodos } from "@/mocks/todo.mock";
-import { getTodos } from "@/services/todo.service";
+import { createTodo, getTodos, getTodoUsingId } from "@/services/todo.service";
 import { ApiResponse } from "@/types/api.types";
 import { Todo } from "@/types/todo.types";
 import { NextResponse } from "next/server"
@@ -32,12 +31,21 @@ export const POST = async (request: Request) => {
     completed: false,
   };
 
-  mockTodos.push(newTodo);
+  try {
+    const insertedId = await createTodo(newTodo);
 
-  return NextResponse.json<ApiResponse<Todo>>({
-    status: true,
-    message: "Todo created successfully",
-    data: newTodo
-  })
+    const newCreatedTodo = await getTodoUsingId(insertedId.toString());
+
+    return NextResponse.json<ApiResponse<Todo>>({
+      status: true,
+      message: "Todo created successfully",
+      data: newCreatedTodo!,
+    })
+  } catch (error) {
+    return NextResponse.json(
+      { status: false, message: "Failed to create todo" },
+      { status: 500 }
+    );
+  }
 }
 

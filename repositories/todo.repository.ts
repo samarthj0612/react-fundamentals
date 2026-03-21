@@ -11,6 +11,12 @@ export const findAllTodos = async () => {
   return data;
 };
 
+export const insertTodo = async (todo: Todo) => {
+  const result = await collection.insertOne(todo);
+
+  return result.insertedId;
+};
+
 export const findTodoById = async (id: string) => {
   const todo = await collection.findOne({ id });
 
@@ -23,5 +29,10 @@ export const updateTodoById = async (id: string, updatedFields: Partial<Todo>) =
     { $set: updatedFields },
     { returnDocument: "after" }
   );
+  return result;
+}
+
+export const deleteTodoById = async (id: string) => {
+  const result = await collection.deleteOne({ id });
   return result;
 }
