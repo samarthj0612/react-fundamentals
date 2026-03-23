@@ -1,10 +1,11 @@
 "use client";
 
-import { emailRegex } from "@/lib/validators";
-import { useFormik } from "formik"
-import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
+import { useFormik } from "formik"
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { AnimatePresence, motion } from "framer-motion";
+
+import { emailRegex } from "@/lib/validators";
 
 const page = () => {
   const [isPasswordMasked, setIsPasswordMasked] = useState<boolean>(true);
@@ -36,7 +37,7 @@ const page = () => {
       }
     },
     onSubmit: handleSubmit,
-  })  
+  })
 
   return (
     <div>
@@ -49,6 +50,7 @@ const page = () => {
             <input
               type="email"
               name="email"
+              value={formik.values.email}
               onChange={formik.handleChange}
               className="min-w-48 w-full py-1 outline-none"
               placeholder="example@domain.com"
@@ -64,6 +66,7 @@ const page = () => {
                 <input
                   type={isPasswordMasked ? "password" : "text"}
                   name="password"
+                  value={formik.values.password}
                   onChange={formik.handleChange}
                   className="min-w-48 w-full py-1 outline-none"
                 />
@@ -91,6 +94,9 @@ const page = () => {
 
         <div className="flex gap-4 justify-center">
           <button type="submit" className="w-fit mt-2 px-8 py-1 rounded text-white bg-[#007BFF]/80 hover:bg-[#007BFF] cursor-pointer transition-all">Submit</button>
+          <button type="button" onClick={() => {
+            formik.resetForm()
+          }} className="w-fit mt-2 px-8 py-1 rounded text-white bg-[#6c757d] hover:bg-[#6c757d]/80 cursor-pointer transition-all">Reset</button>
         </div>
       </form>
     </div>
