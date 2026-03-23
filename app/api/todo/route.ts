@@ -1,8 +1,9 @@
-import { createTodo, getTodos, getTodoUsingId } from "@/services/todo.service";
-import { ApiResponse } from "@/types/api.types";
-import { Todo } from "@/types/todo.types";
-import { NextResponse } from "next/server"
 import { v4 as uuidv4 } from 'uuid';
+import { NextResponse } from "next/server"
+
+import { Todo } from "@/types/todo.types";
+import { ApiResponse } from "@/types/api.types";
+import { createTodo, getTodos, getTodoUsingId } from "@/services/todo.service";
 
 export const GET = async () => {
   const todos = await getTodos();
